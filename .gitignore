@@ -35,3 +35,10 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+/src/main/resources/application.yml
+src/test/resources/application-test.yml
+###.http 설정 ###
+http-client.env.json
+
