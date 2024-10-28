@@ -1,11 +1,17 @@
 package com.youtube_shorts_map.collector.service;
 
+import com.youtube_shorts_map.domain.entity.Youtuber;
+
+import java.util.List;
+
 public interface YoutubeDataCollectorService {
 
-    // 수동 데이터 수집 트리거 메서드 정의
-    void collectYoutubeData(String youtuberId);
+    // 수집 대상(유튜버 아이디) select
+    List<Youtuber> getYoutuberList();
+    // 데이터 최근 10개 수집
+    void collectYoutubeData(Youtuber youtuber);
+    // 데이터 전체 수집
+    void collectYoutubeDataAll(Youtuber youtuber);
 
-    // 스케줄링을 통한 주기적인 데이터 수집 메서드 정의
-    void scheduledYoutubeDataCollection();
 
 }
