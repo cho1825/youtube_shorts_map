@@ -16,7 +16,7 @@ public class ShortsScheduler {
     public void collectShortsData(){
         List<Youtuber> youtuberList = youtubeDataCollectorService.getYoutuberList();
         for (Youtuber youtuber : youtuberList) {
-            youtubeDataCollectorService.collectYoutubeData(youtuber);
+            youtubeDataCollectorService.collectYoutubeData(youtuber.getChannelId());
         }
     }
 

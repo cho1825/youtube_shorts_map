@@ -21,6 +21,10 @@ public class Youtuber extends BaseEntity {
     @Column(length = 5000)
     private String description;  // 유튜버 설명
 
+    @Column(name = "deleted", length = 1)
+    private String deleted;
+
+
     public Youtuber() {
     }
 

@@ -9,7 +9,7 @@ public interface YoutubeDataCollectorService {
     // 수집 대상(유튜버 아이디) select
     List<Youtuber> getYoutuberList();
     // 데이터 최근 10개 수집
-    void collectYoutubeData(Youtuber youtuber);
+    void collectYoutubeData(String channelId);
     // 데이터 전체 수집
     void collectYoutubeDataAll(Youtuber youtuber);
 
