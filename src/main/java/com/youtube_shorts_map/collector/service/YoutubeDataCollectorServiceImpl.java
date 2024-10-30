@@ -1,5 +1,6 @@
 package com.youtube_shorts_map.collector.service;
 
+import com.youtube_shorts_map.collector.enums.ApiFetchLimit;
 import com.youtube_shorts_map.collector.videoFactory.VideoInfoFactory;
 import com.youtube_shorts_map.domain.entity.Place;
 import com.youtube_shorts_map.domain.entity.Video;
@@ -29,10 +30,10 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
     }
 
     @Override
-    public void collectYoutubeData(String channelId) {
+    public void collectYoutubeData(String channelId, ApiFetchLimit apiFetchLimit) {
 
         //아이디로 비디어 데이터 가져와서 List 만들기
-        List<Video> videos = searchVideoById(channelId);
+        List<Video> videos = searchVideoById(channelId, apiFetchLimit);
         VideoInfoFactory factory = VideoInfoFactory.createFactory(channelId);
         //비디오 엔티티 저장
         videoRepository.saveAll(videos);
@@ -45,15 +46,11 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
         }
     }
 
-    private List<Video> searchVideoById(String channelId) {
-        //유튜브 api 연결
+
+
+    private List<Video> searchVideoById(String channelId, ApiFetchLimit apiFetchLimit) {
+        //유튜브 api 연결을 통한 비디오 리스트 가져오기
         return List.of();
-    }
-
-
-    @Override
-    public void collectYoutubeDataAll(Youtuber youtuber) {
-
     }
 
 }

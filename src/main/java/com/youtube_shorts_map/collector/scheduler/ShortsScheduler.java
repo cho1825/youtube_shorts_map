@@ -1,5 +1,6 @@
 package com.youtube_shorts_map.collector.scheduler;
 
+import com.youtube_shorts_map.collector.enums.ApiFetchLimit;
 import com.youtube_shorts_map.collector.service.YoutubeDataCollectorService;
 import com.youtube_shorts_map.domain.entity.Youtuber;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ public class ShortsScheduler {
     public void collectShortsData(){
         List<Youtuber> youtuberList = youtubeDataCollectorService.getYoutuberList();
         for (Youtuber youtuber : youtuberList) {
-            youtubeDataCollectorService.collectYoutubeData(youtuber.getChannelId());
+            youtubeDataCollectorService.collectYoutubeData(youtuber.getChannelId(), ApiFetchLimit.ALL);
         }
     }
 
