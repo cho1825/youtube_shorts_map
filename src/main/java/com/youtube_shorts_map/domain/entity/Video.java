@@ -1,6 +1,7 @@
 package com.youtube_shorts_map.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -23,7 +24,7 @@ public class Video extends BaseEntity {
     private String description;
 
     @Column(nullable = false, length = 255)
-    private String youtube_url;
+    private String youtubeUrl;
 
     @Column(nullable = false)
     private LocalDateTime publishedAt;
@@ -39,11 +40,12 @@ public class Video extends BaseEntity {
     public Video() {
     }
 
-    public Video(String videoId, String title, String description, String youtube_url, LocalDateTime publishedAt, Youtuber youtuber, City city) {
+    @Builder
+    public Video(String videoId, String title, String description, String youtubeUrl, LocalDateTime publishedAt, Youtuber youtuber, City city) {
         this.videoId = videoId;
         this.title = title;
         this.description = description;
-        this.youtube_url = youtube_url;
+        this.youtubeUrl = youtubeUrl;
         this.publishedAt = publishedAt;
         this.youtuber = youtuber;
         this.city = city;
@@ -65,8 +67,8 @@ public class Video extends BaseEntity {
         return description;
     }
 
-    public String getYoutube_url() {
-        return youtube_url;
+    public String getYoutubeUrl() {
+        return youtubeUrl;
     }
 
     public LocalDateTime getPublishedAt() {

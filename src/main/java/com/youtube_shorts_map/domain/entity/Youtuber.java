@@ -1,6 +1,7 @@
 package com.youtube_shorts_map.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Objects;
 
@@ -28,6 +29,7 @@ public class Youtuber extends BaseEntity {
     public Youtuber() {
     }
 
+    @Builder
     public Youtuber(String name, String channelId, String description) {
         this.name = name;
         this.channelId = channelId;
