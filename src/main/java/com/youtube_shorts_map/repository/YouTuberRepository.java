@@ -10,4 +10,6 @@ import java.util.List;
 public interface YouTuberRepository extends JpaRepository<Youtuber, Long> {
 
     List<Youtuber> findByDeleted(String deleted);
+
+    Youtuber findByName(String 맠카);
 }

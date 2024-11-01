@@ -30,11 +30,11 @@ public class Video extends BaseEntity {
     private LocalDateTime publishedAt;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "youtuber_id", nullable = false)
+    @JoinColumn(name = "youtuber_id", nullable = true)
     private Youtuber youtuber;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", nullable = true)
     private City city;
 
     public Video() {

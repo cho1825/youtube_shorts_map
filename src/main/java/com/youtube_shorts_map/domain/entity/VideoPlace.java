@@ -1,6 +1,7 @@
 package com.youtube_shorts_map.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Objects;
 
@@ -22,7 +23,7 @@ public class VideoPlace extends BaseEntity {
 
     public VideoPlace() {
     }
-
+    @Builder
     public VideoPlace(Video video, Place plcae) {
         this.video = video;
         this.plcae = plcae;
