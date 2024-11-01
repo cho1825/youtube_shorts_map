@@ -41,6 +41,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-devtools'
 
 
+
+//    - Google API와 통신하기 위한 Java용 클라이언트 라이브러리
+    implementation 'com.google.api-client:google-api-client:1.33.0'
+//    - OAuth 2.0 인증 프로토콜을 지원하기 위한 Jetty 구현을 포함하는 라이브러리
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+//    - YouTube Data API를 사용할 수 있게 해주는 Google API 클라이언트 라이브러리
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev20230816-2.0.0'
+//    - Google HTTP Client 라이브러리의 Jackson2 모듈을 사용하여 JSON 데이터를 처리하는 기능을 제공하는 라이브러리
+    implementation 'com.google.http-client:google-http-client-jackson2:1.39.2'
+
+
 }
 
 tasks.named('test') {
