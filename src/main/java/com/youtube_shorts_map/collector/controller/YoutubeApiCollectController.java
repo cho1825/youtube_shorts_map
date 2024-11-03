@@ -6,6 +6,8 @@ import com.youtube_shorts_map.domain.entity.Youtuber;
 import com.youtube_shorts_map.repository.VideoRepository;
 import com.youtube_shorts_map.repository.YouTuberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,7 +27,12 @@ public class YoutubeApiCollectController {
 
     @GetMapping("/videos")
     public void saveMakaaVideo() throws IOException {
+
+        // Pageable 설정 (0번 페이지에서 20개 가져오기)
+        Pageable pageable = PageRequest.of(0, 20);
+
         Optional<Youtuber> byId = youTuberRepository.findById(1L);
+//        List<Video> videos = videoRepository.findAllByYoutuber(byId.get(),pageable);
         List<Video> videos = videoRepository.findAllByYoutuber(byId.get());
 //        List<Video> videos = youtubeDataCollectorService.getVideosFromYoutube(byId.get(), ApiFetchLimit.ALL);
         youtubeDataCollectorService.changeVideosToPlace(byId.get(), videos);

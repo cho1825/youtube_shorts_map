@@ -2,7 +2,6 @@ package com.youtube_shorts_map.collector.videoFactory;
 
 import com.youtube_shorts_map.domain.entity.Place;
 import com.youtube_shorts_map.domain.entity.Video;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -12,7 +11,7 @@ import java.util.List;
 public class MakaVideoFactory extends VideoInfoFactory{
 
     @Override
-    public List<Place> getPlaceInfo(Video video) {
+    public List<Place> getPlaceInfo(Video video, String kakaoApiKey) {
         String text = video.getDescription();
         List<Place> places = new ArrayList<>();
         // 프랜차이즈 단어가 포함된 경우 null 반환
@@ -22,7 +21,7 @@ public class MakaVideoFactory extends VideoInfoFactory{
 
         if (text.contains("-")){
             String[] split = text.split("-");
-            Place place = searchByExtractedText(split[0]);
+            Place place = searchByExtractedText(split[0], kakaoApiKey);
             if (place != null) {
                 places.add(place);
                 return places;
@@ -35,7 +34,7 @@ public class MakaVideoFactory extends VideoInfoFactory{
                 if (!entry.trim().isEmpty()) { // 빈 항목 방지
                     // "-" 기호 앞의 부분을 추출
                     String storeName = entry.split("-")[0];
-                    Place place = searchByExtractedText(storeName);
+                    Place place = searchByExtractedText(storeName, kakaoApiKey);
                     if (place != null) {
                         places.add(place);
                     }
@@ -59,8 +58,8 @@ public class MakaVideoFactory extends VideoInfoFactory{
     }
 
 
-    private Place searchByExtractedText(String text) {
+    private Place searchByExtractedText(String text, String kakaoApiKey) {
         // 카카오맵 api 연동 주소 검색
-        return KakaoApi.getPlace(text);
+        return KakaoApi.getPlace(text,kakaoApiKey);
     }
 }

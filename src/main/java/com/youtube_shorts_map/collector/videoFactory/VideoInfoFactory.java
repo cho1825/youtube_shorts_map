@@ -7,7 +7,7 @@ import java.util.List;
 
 public abstract class VideoInfoFactory {
 
-    public abstract List<Place> getPlaceInfo(Video video);
+    public abstract List<Place> getPlaceInfo(Video video, String kakaoApiKey);
 
     public VideoInfoFactory() {
     }

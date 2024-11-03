@@ -15,7 +15,7 @@ public class Place extends BaseEntity{
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id", nullable = false)
+    @JoinColumn(name = "city_id", nullable = true)
     private City city;
 
     @Column(nullable = false, length = 255)
@@ -107,7 +107,12 @@ public class Place extends BaseEntity{
 
     public String extractCityFromAddress(String address) {
         if (address != null && address.contains(" ")) {
-            return address.split(" ")[0]; // 예: "대전광역시 서구 둔산동" -> "대전광역시"
+            String[] split = address.split(" ");
+            if (split[0].equals("대전")) {
+                return address.split(" ")[0]; // 예: "대전광역시 서구 둔산동" -> "대전광역시"
+            }else {
+                return address.split(" ")[1]; // 예: "대전광역시 서구 둔산동" -> "대전광역시"
+            }
         }
         return "전국"; // 주소 형식에 맞지 않는 경우
     }

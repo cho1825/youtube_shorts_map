@@ -2,9 +2,7 @@ package com.youtube_shorts_map.collector.videoFactory;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.youtube_shorts_map.domain.entity.City;
 import com.youtube_shorts_map.domain.entity.Place;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -14,10 +12,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 public class KakaoApi {
 
-    @Value("${kakao.api.key}")
-    private static String apiKey;
 
-    public static Place getPlace(String text) {
+    public static Place getPlace(String text, String kakaoApiKey) {
 
         String url = "https://dapi.kakao.com/v2/local/search/keyword.json";
         // 좌표와 반경 설정
@@ -45,7 +41,7 @@ public class KakaoApi {
 
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Authorization", "KakaoAK " + apiKey);
+        headers.set("Authorization", "KakaoAK " + kakaoApiKey);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 

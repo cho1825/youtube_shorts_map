@@ -13,8 +13,11 @@ import com.youtube_shorts_map.domain.entity.VideoPlace;
 import com.youtube_shorts_map.domain.entity.Youtuber;
 import com.youtube_shorts_map.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.Instant;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorService{
@@ -33,9 +37,13 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
     private final VideoPlaceRepository videoPlaceRepository;
     private final YouTuberRepository youTuberRepository;
     private final CityRepository cityRepository;
+    private final RedisTemplate<String, String> redisTemplate;
 
     @Value("${youtube.api.key}")
     private String apiKey;
+
+    @Value("${kakao.api.key}")
+    private String kakaoApiKey;
 
     @Override
     public List<Youtuber> getYoutuberList() {
@@ -43,12 +51,25 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
     }
 
     @Override
+    @Transactional
     public List<Video> getVideosFromYoutube(Youtuber youtuber, ApiFetchLimit apiFetchLimit) throws IOException {
 
         //아이디로 비디어 데이터 가져와서 List 만들기
         List<Video> videos = searchVideoById(youtuber, apiFetchLimit);
-        //비디오 엔티티 저장
-        videoRepository.saveAll(videos);
+
+        for (Video video : videos) {
+            String videoId = video.getVideoId();
+            if (!redisTemplate.hasKey(videoId)) {
+                if (!videoRepository.existsByVideoId(videoId)) {
+                    videoRepository.save(video);
+                }else {
+                    log.info("Video already exists: {}", videoId);
+                }
+                log.info("New video saved: {}", videoId);
+            }else {
+                log.info("Video already exists in Redis: {}", videoId);
+            }
+        }
 
         return videos;
 
@@ -58,30 +79,48 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
     public void changeVideosToPlace(Youtuber youtuber, List<Video> videos) {
         VideoInfoFactory factory = VideoInfoFactory.createFactory(youtuber.getChannelId());
         for (Video video : videos) {
-            //영상정보를 가지고 식당데이터 추출
-            List<Place> places = factory.getPlaceInfo(video);
-            if (places != null) {
-                for (Place place : places) {
-                    String cityNm = place.extractCityFromAddress(place.getRoadAddress());
+            try {
+                // 영상 정보로부터 식당 데이터 추출
+                List<Place> places = factory.getPlaceInfo(video, kakaoApiKey);
+                if (places != null) {
+                    for (Place place : places) {
+                        try {
+                            String cityNm = place.extractCityFromAddress(place.getRoadAddress());
 
-                    Place savePlace = Place.builder()
-                            .city(cityRepository.findByNameContaining(cityNm))
-                            .name(place.getName())
-                            .lotAddress(place.getLotAddress())
-                            .roadAddress(place.getRoadAddress())
-                            .latitude(place.getLatitude())
-                            .longitude(place.getLongitude())
-                            .mapUrl(place.getMapUrl())
-                            .phoneNumber(place.getPhoneNumber())
-                            .build();
+                            Place savePlace = Place.builder()
+                                    .city(cityRepository.findByNameContaining(cityNm))
+                                    .name(place.getName())
+                                    .lotAddress(place.getLotAddress())
+                                    .roadAddress(place.getRoadAddress())
+                                    .latitude(place.getLatitude())
+                                    .longitude(place.getLongitude())
+                                    .mapUrl(place.getMapUrl())
+                                    .phoneNumber(place.getPhoneNumber())
+                                    .build();
 
-                    placeRepository.save(savePlace);
-                    VideoPlace videoPlace = VideoPlace.builder()
-                            .plcae(savePlace)
-                            .video(video)
-                            .build();
-                    videoPlaceRepository.save(videoPlace);
+                            // 중복되지 않으면 저장
+                            if (!placeRepository.existsByRoadAddress(place.getRoadAddress())) {
+                                placeRepository.save(savePlace);
+                            }
+
+                            if (!videoPlaceRepository.existsByVideo(video)) {
+                                VideoPlace videoPlace = VideoPlace.builder()
+                                        .plcae(savePlace)
+                                        .video(video)
+                                        .build();
+                                videoPlaceRepository.save(videoPlace);
+                            }
+                        } catch (Exception e) {
+                            // 각 Place 처리 중 예외 발생 시 로그 출력 후 다음 Place로 넘어감
+                            System.err.println("Failed to process place: " + place.getName());
+                            e.printStackTrace();
+                        }
+                    }
                 }
+            } catch (Exception e) {
+                // 비디오 정보 추출 실패 시 로그 출력 후 다음 비디오로 넘어감
+                System.err.println("Failed to process video ID: " + video.getVideoId());
+                e.printStackTrace();
             }
         }
     }
