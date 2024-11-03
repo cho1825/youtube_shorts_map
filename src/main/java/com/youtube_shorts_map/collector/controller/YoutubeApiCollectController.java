@@ -1,5 +1,6 @@
 package com.youtube_shorts_map.collector.controller;
 
+import com.youtube_shorts_map.collector.enums.ApiFetchLimit;
 import com.youtube_shorts_map.collector.service.YoutubeDataCollectorService;
 import com.youtube_shorts_map.domain.entity.Video;
 import com.youtube_shorts_map.domain.entity.Youtuber;
@@ -31,11 +32,11 @@ public class YoutubeApiCollectController {
         // Pageable 설정 (0번 페이지에서 20개 가져오기)
         Pageable pageable = PageRequest.of(0, 20);
 
-        Optional<Youtuber> byId = youTuberRepository.findById(1L);
+        Optional<Youtuber> makka = youTuberRepository.findById(1L);
 //        List<Video> videos = videoRepository.findAllByYoutuber(byId.get(),pageable);
-        List<Video> videos = videoRepository.findAllByYoutuber(byId.get());
-//        List<Video> videos = youtubeDataCollectorService.getVideosFromYoutube(byId.get(), ApiFetchLimit.ALL);
-        youtubeDataCollectorService.changeVideosToPlace(byId.get(), videos);
+//        List<Video> videos = videoRepository.findAllByYoutuber(byId.get());
+        List<Video> videos = youtubeDataCollectorService.getVideosFromYoutube(makka.get(), ApiFetchLimit.SIZE_5);
+        youtubeDataCollectorService.changeVideosToPlace(makka.get(), videos);
 
     }
 

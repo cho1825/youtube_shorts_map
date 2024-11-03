@@ -26,6 +26,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Slf4j
 @Service
@@ -56,22 +57,24 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
 
         //아이디로 비디어 데이터 가져와서 List 만들기
         List<Video> videos = searchVideoById(youtuber, apiFetchLimit);
-
+        List<String> videoIds = new ArrayList<>();
         for (Video video : videos) {
             String videoId = video.getVideoId();
             if (!redisTemplate.hasKey(videoId)) {
+                redisTemplate.opsForValue().set(videoId, videoId, 24, TimeUnit.HOURS); // 24시간 저장
                 if (!videoRepository.existsByVideoId(videoId)) {
                     videoRepository.save(video);
+                    log.info("New video saved: {}", videoId);
+                    videoIds.add(videoId);  // 저장된 비디오의 ID를 추가
                 }else {
                     log.info("Video already exists: {}", videoId);
                 }
-                log.info("New video saved: {}", videoId);
             }else {
                 log.info("Video already exists in Redis: {}", videoId);
             }
         }
 
-        return videos;
+        return videoRepository.findAllByVideoIdIn(videoIds);
 
     }
 

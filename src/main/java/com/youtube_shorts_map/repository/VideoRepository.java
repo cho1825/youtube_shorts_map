@@ -15,4 +15,6 @@ public interface VideoRepository extends JpaRepository<Video, Long> {
     List<Video> findAllByYoutuber(Youtuber youtuber, Pageable pageable);
 
     boolean existsByVideoId(String videoId);
+
+    List<Video> findAllByVideoIdIn(List<String> videoIds);
 }
