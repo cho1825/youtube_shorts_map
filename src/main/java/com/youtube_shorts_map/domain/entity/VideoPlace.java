@@ -19,14 +19,15 @@ public class VideoPlace extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
-    private Place plcae;
+    private Place place;
 
     public VideoPlace() {
     }
+
     @Builder
     public VideoPlace(Video video, Place plcae) {
         this.video = video;
-        this.plcae = plcae;
+        this.place = plcae;
     }
 
     public Long getId() {
@@ -37,9 +38,10 @@ public class VideoPlace extends BaseEntity {
         return video;
     }
 
-    public Place getPlcae() {
-        return plcae;
+    public Place getPlace() {
+        return place;
     }
+
 
     @Override
     public boolean equals(Object o) {
