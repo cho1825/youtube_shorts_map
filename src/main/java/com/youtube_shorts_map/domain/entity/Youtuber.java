@@ -52,6 +52,10 @@ public class Youtuber extends BaseEntity {
         return description;
     }
 
+    public String getDeleted() {
+        return deleted;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
