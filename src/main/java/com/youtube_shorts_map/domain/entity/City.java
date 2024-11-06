@@ -1,6 +1,7 @@
 package com.youtube_shorts_map.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 
 import java.util.Objects;
 
@@ -22,7 +23,9 @@ public class City extends BaseEntity {
     public City() {
     }
 
-    public City(String name, String regionCode) {
+    @Builder
+    public City(Long id,String name, String regionCode) {
+        this.id = id;
         this.name = name;
         this.regionCode = regionCode;
     }
