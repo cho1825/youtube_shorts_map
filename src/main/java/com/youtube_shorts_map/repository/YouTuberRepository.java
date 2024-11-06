@@ -5,11 +5,12 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface YouTuberRepository extends JpaRepository<Youtuber, Long> {
 
     List<Youtuber> findByDeleted(String deleted);
 
-    Youtuber findByName(String 맠카);
+    Optional<Youtuber> findByName(String 맠카);
 }
