@@ -5,10 +5,12 @@ import com.youtube_shorts_map.domain.entity.VideoPlace;
 import com.youtube_shorts_map.domain.entity.Youtuber;
 import com.youtube_shorts_map.dto.PlaceDto;
 import com.youtube_shorts_map.repository.*;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,7 +57,9 @@ public class PlaceService {
                 .collect(Collectors.toList());
     }
 
-    public List<PlaceDto> getMakersByJPQL(String regionCode, String youtuberNm) {
+    @CircuitBreaker(name = "placeCircuitBreaker", fallbackMethod = "getMakersByJPQLFallback")
+    @Cacheable(value = "placeCache", key = "#regionCode + '_' + #youtuberNm")
+    public List<PlaceDto> getMakersByJPQL(String regionCode, String youtuberNm){
         // JPQL 쿼리 작성
 
         String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId) " +
@@ -74,4 +78,26 @@ public class PlaceService {
         // 결과 조회 및 반환
         return query.getResultList();
     }
+
+    public List<PlaceDto> getMakersByJPQLFallback(String regionCode, String youtuberNm, Throwable throwable) {
+        // JPQL 쿼리 작성
+
+        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId) " +
+                "from VideoPlace vp " +
+                "Join vp.video v " +
+                "join v.youtuber y " +
+                "join v.city c " +
+                "join vp.place p " +
+                "where y.name = :youtuberNm and c.regionCode = :regionCode";
+
+
+        TypedQuery<PlaceDto> query = entityManager.createQuery(jpql, PlaceDto.class);
+        query.setParameter("regionCode", regionCode);
+        query.setParameter("youtuberNm", youtuberNm);
+
+        // 결과 조회 및 반환
+        return query.getResultList();
+    }
+
+
 }
