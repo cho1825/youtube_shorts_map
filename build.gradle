@@ -52,6 +52,12 @@ dependencies {
     implementation 'com.google.http-client:google-http-client-jackson2:1.39.2'
 
 
+    implementation 'io.github.resilience4j:resilience4j-spring-boot3:2.1.0'
+    implementation 'io.github.resilience4j:resilience4j-circuitbreaker:2.1.0'
+
+
+
+
 }
 
 tasks.named('test') {
