@@ -7,6 +7,7 @@ import com.youtube_shorts_map.dto.YoutuberDto;
 import com.youtube_shorts_map.repository.CityYoutuberRepository;
 import com.youtube_shorts_map.repository.YouTuberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class YouTuberService {
 
     private final YouTuberRepository youTuberRepository;
     private final CityYoutuberRepository cityYoutuberRepository;
-
+    @Cacheable(value = "youtuberCache", key = "'youtuber'")
     public List<YoutuberDto> getYoutubers(Long cityId) {
         City city = City.builder().id(cityId).build();
         List<CityYoutuber> cityYoutubers = cityYoutuberRepository.findByCity(city);
