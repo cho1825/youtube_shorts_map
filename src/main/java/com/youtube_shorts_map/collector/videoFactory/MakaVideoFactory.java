@@ -58,8 +58,8 @@ public class MakaVideoFactory extends VideoInfoFactory{
     }
 
 
-    private Place searchByExtractedText(String text, String kakaoApiKey) {
+    private Place searchByExtractedText(String placeNm, String kakaoApiKey) {
         // 카카오맵 api 연동 주소 검색
-        return KakaoApi.getPlace(text,kakaoApiKey);
+        return KakaoApi.getPlace(placeNm,kakaoApiKey);
     }
 }

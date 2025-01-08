@@ -13,7 +13,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class KakaoApi {
 
 
-    public static Place getPlace(String text, String kakaoApiKey) {
+    public static Place getPlace(String placeNm, String kakaoApiKey) {
 
         String url = "https://dapi.kakao.com/v2/local/search/keyword.json";
         // 좌표와 반경 설정
@@ -31,13 +31,13 @@ public class KakaoApi {
                 .append("&radius=")
                 .append(radius)
                 .append("&query=")
-                .append(text);
+                .append(placeNm);
 
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url)
                 .queryParam("y", latitude)
                 .queryParam("x", longitude)
                 .queryParam("radius", radius)
-                .queryParam("query", text);
+                .queryParam("query", placeNm);
 
 
         HttpHeaders headers = new HttpHeaders();
