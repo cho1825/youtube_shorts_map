@@ -60,18 +60,21 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
         List<String> videoIds = new ArrayList<>();
         for (Video video : videos) {
             String videoId = video.getVideoId();
-            if (!redisTemplate.hasKey(videoId)) {
-                redisTemplate.opsForValue().set(videoId, videoId, 24, TimeUnit.HOURS); // 24시간 저장
-                if (!videoRepository.existsByVideoId(videoId)) {
-                    videoRepository.save(video);
-                    log.info("New video saved: {}", videoId);
-                    videoIds.add(videoId);  // 저장된 비디오의 ID를 추가
-                }else {
-                    log.info("Video already exists: {}", videoId);
-                }
+            if (!videoRepository.existsByVideoId(videoId)) {
+                videoRepository.save(video);
+                log.info("New video saved: {}", videoId);
+                videoIds.add(videoId);  // 저장된 비디오의 ID를 추가
             }else {
-                log.info("Video already exists in Redis: {}", videoId);
+                log.info("Video already exists: {}", videoId);
             }
+
+
+//            if (!redisTemplate.hasKey(videoId)) {
+//                redisTemplate.opsForValue().set(videoId, videoId, 24, TimeUnit.HOURS); // 24시간 저장
+//
+//            }else {
+//                log.info("Video already exists in Redis: {}", videoId);
+//            }
         }
 
         return videoRepository.findAllByVideoIdIn(videoIds);
