@@ -35,7 +35,7 @@ public class YoutubeApiCollectController {
         Optional<Youtuber> makka = youTuberRepository.findById(1L);
 //        List<Video> videos = videoRepository.findAllByYoutuber(byId.get(),pageable);
 //        List<Video> videos = videoRepository.findAllByYoutuber(byId.get());
-        List<Video> videos = youtubeDataCollectorService.getVideosFromYoutube(makka.get(), ApiFetchLimit.SIZE_5);
+        List<Video> videos = youtubeDataCollectorService.getVideosFromYoutube(makka.get(), ApiFetchLimit.ALL);
         youtubeDataCollectorService.changeVideosToPlace(makka.get(), videos);
 
     }
