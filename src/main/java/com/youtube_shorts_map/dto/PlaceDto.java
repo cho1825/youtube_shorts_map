@@ -16,6 +16,9 @@ public class PlaceDto {
     private String videoUrl;
     private String description;
     private String videoId;
+    private String categoryName;
+    private String categoryGroupName;
+
 
 
 
@@ -34,7 +37,7 @@ public class PlaceDto {
         this.videoId = videoId;
     }
 
-    public PlaceDto(Long id, String name, String roadAddress, String lotAddress, double latitude, double longitude, String youtuberNm, String videoUrl, String description, String videoId) {
+    public PlaceDto(Long id, String name, String roadAddress, String lotAddress, double latitude, double longitude, String youtuberNm, String videoUrl, String description, String videoId,String categoryGroupName, String categoryName) {
         this.id = id;
         this.name = name;
         this.roadAddress = roadAddress;
@@ -45,6 +48,8 @@ public class PlaceDto {
         this.videoUrl = videoUrl;
         this.description = description;
         this.videoId = videoId;
+        this.categoryName = categoryName;
+        this.categoryGroupName = categoryGroupName;
     }
 
     public Long getId() {
@@ -85,5 +90,13 @@ public class PlaceDto {
 
     public String getVideoId() {
         return videoId;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    public String getCategoryGroupName() {
+        return categoryGroupName;
     }
 }

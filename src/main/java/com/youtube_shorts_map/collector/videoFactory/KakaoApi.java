@@ -74,6 +74,8 @@ public class KakaoApi {
                 String kakaoMapUrl = firstPlace.path("place_url").asText();
                 Double x = firstPlace.path("x").asDouble();
                 Double y = firstPlace.path("y").asDouble();
+                String categoryGroupName = firstPlace.path("category_group_name").asText();
+                String categoryName = firstPlace.path("category_name").asText();
 
                 Place place = Place.builder()
                         .name(placeName)
@@ -83,6 +85,8 @@ public class KakaoApi {
                         .longitude(x)
                         .mapUrl(kakaoMapUrl)
                         .phoneNumber(phone)
+                        .categoryGroupName(categoryGroupName)
+                        .categoryName(categoryName)
                         .build();
 
                 return place;

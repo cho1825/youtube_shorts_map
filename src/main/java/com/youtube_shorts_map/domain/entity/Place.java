@@ -39,11 +39,18 @@ public class Place extends BaseEntity{
     @Column(nullable = true)
     private String phoneNumber;
 
+    @Column(nullable = true, length = 255)
+    private String categoryGroupName;
+
+    @Column(nullable = true, length = 255)
+    private String categoryName;
+
+
     public Place() {
     }
 
     @Builder
-    public Place(City city, String name, String lotAddress, String roadAddress, double latitude, double longitude, String mapUrl, String phoneNumber) {
+    public Place(City city, String name, String lotAddress, String roadAddress, double latitude, double longitude, String mapUrl, String phoneNumber, String categoryGroupName, String categoryName) {
         this.city = city;
         this.name = name;
         this.lotAddress = lotAddress;
@@ -52,6 +59,8 @@ public class Place extends BaseEntity{
         this.longitude = longitude;
         this.mapUrl = mapUrl;
         this.phoneNumber = phoneNumber;
+        this.categoryGroupName = categoryGroupName;
+        this.categoryName = categoryName;
     }
 
     public Long getId() {
@@ -88,6 +97,15 @@ public class Place extends BaseEntity{
 
     public double getLongitude() {
         return longitude;
+    }
+
+
+    public String getCategoryGroupName() {
+        return categoryGroupName;
+    }
+
+    public String getCategoryName() {
+        return categoryName;
     }
 
     @Override

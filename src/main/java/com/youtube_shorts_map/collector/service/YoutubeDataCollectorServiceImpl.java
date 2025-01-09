@@ -102,6 +102,8 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
                                     .longitude(place.getLongitude())
                                     .mapUrl(place.getMapUrl())
                                     .phoneNumber(place.getPhoneNumber())
+                                    .categoryGroupName(place.getCategoryGroupName())
+                                    .categoryName(place.getCategoryName())
                                     .build();
 
                             // 중복되지 않으면 저장
