@@ -59,7 +59,18 @@ public class PlaceService {
 
     @CircuitBreaker(name = "placeCircuitBreaker", fallbackMethod = "getMakersByJPQLFallback")
     @Cacheable(value = "placeCache", key = "#regionCode + '_' + #youtuberNm")
-    public List<PlaceDto> getMakersByJPQL(String regionCode, String youtuberNm){
+    public List<PlaceDto> getMakersByJPQL(String regionCode, String youtuberNm, String category){
+
+
+        if ("restaurant".equals(category)) {
+            category = "음식점";
+        }else if ("cafe".equals(category)){
+            category = "카페";
+        }else {
+            category = null;
+        }
+
+
         // JPQL 쿼리 작성
 
         String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId,p.categoryGroupName,p.categoryName) " +
@@ -68,12 +79,15 @@ public class PlaceService {
                 "join v.youtuber y " +
                 "join v.city c " +
                 "join vp.place p " +
-                "where y.name = :youtuberNm and c.regionCode = :regionCode";
-
+                "where y.name = :youtuberNm and c.regionCode = :regionCode " +
+                (category != null ? "AND p.categoryGroupName = :categoryGroupName " : "");
 
         TypedQuery<PlaceDto> query = entityManager.createQuery(jpql, PlaceDto.class);
         query.setParameter("regionCode", regionCode);
         query.setParameter("youtuberNm", youtuberNm);
+        if (category != null) {
+            query.setParameter("categoryGroupName", category);
+        }
 
         // 결과 조회 및 반환
         return query.getResultList();
