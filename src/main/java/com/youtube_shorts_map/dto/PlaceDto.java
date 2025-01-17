@@ -18,6 +18,7 @@ public class PlaceDto {
     private String videoId;
     private String categoryName;
     private String categoryGroupName;
+    private String phoneNumber;
 
 
 
@@ -26,7 +27,7 @@ public class PlaceDto {
     }
 
     @Builder
-    public PlaceDto(Long id, String name, String roadAddress, String lotAddress,double latitude, double longitude, String description, String videoId) {
+    public PlaceDto(Long id, String name, String roadAddress, String lotAddress,double latitude, double longitude, String description, String videoId,String phoneNumber) {
         this.id = id;
         this.name = name;
         this.roadAddress = roadAddress;
@@ -35,9 +36,10 @@ public class PlaceDto {
         this.longitude = longitude;
         this.description = description;
         this.videoId = videoId;
+        this.phoneNumber = phoneNumber;
     }
 
-    public PlaceDto(Long id, String name, String roadAddress, String lotAddress, double latitude, double longitude, String youtuberNm, String videoUrl, String description, String videoId,String categoryGroupName, String categoryName) {
+    public PlaceDto(Long id, String name, String roadAddress, String lotAddress, double latitude, double longitude, String youtuberNm, String videoUrl, String description, String videoId,String categoryGroupName, String categoryName, String phoneNumber) {
         this.id = id;
         this.name = name;
         this.roadAddress = roadAddress;
@@ -50,6 +52,7 @@ public class PlaceDto {
         this.videoId = videoId;
         this.categoryName = categoryName;
         this.categoryGroupName = categoryGroupName;
+        this.phoneNumber = phoneNumber;
     }
 
     public Long getId() {
@@ -88,12 +91,18 @@ public class PlaceDto {
         return description;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
     public String getVideoId() {
         return videoId;
     }
 
     public String getCategoryName() {
-        return categoryName;
+        int i = categoryName.lastIndexOf(">");
+        String substring = categoryName.substring(i + 2);
+        return substring;
     }
 
     public String getCategoryGroupName() {

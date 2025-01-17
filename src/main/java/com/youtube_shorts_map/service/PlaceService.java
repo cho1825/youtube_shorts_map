@@ -73,7 +73,7 @@ public class PlaceService {
 
         // JPQL 쿼리 작성
 
-        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId,p.categoryGroupName,p.categoryName) " +
+        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId,p.categoryGroupName,p.categoryName,p.phoneNumber) " +
                 "from VideoPlace vp " +
                 "Join vp.video v " +
                 "join v.youtuber y " +
@@ -96,7 +96,18 @@ public class PlaceService {
     public List<PlaceDto> getMakersByJPQLFallback(String regionCode, String youtuberNm, Throwable throwable) {
         // JPQL 쿼리 작성
 
-        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId) " +
+        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(" +
+                                                                        "p.id" +
+                                                                        ", p.name" +
+                                                                        ", p.roadAddress" +
+                                                                        ", p.lotAddress" +
+                                                                        ",p.latitude" +
+                                                                        ", p.longitude" +
+                                                                        ", y.name" +
+                                                                        ", v.youtubeUrl" +
+                                                                        ", v.description" +
+                                                                        ", v.videoId" +
+                                                                        ") " +
                 "from VideoPlace vp " +
                 "Join vp.video v " +
                 "join v.youtuber y " +
