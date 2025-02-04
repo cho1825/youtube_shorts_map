@@ -7,12 +7,14 @@ import com.youtube_shorts_map.domain.entity.Youtuber;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
+@Component
 public class ShortsScheduler {
 
     private final YoutubeDataCollectorService youtubeDataCollectorService;
@@ -27,6 +29,7 @@ public class ShortsScheduler {
                 log.info("저장할 데이터가 없습니다.");
             }else {
                 youtubeDataCollectorService.changeVideosToPlace(youtuber,videosFromYoutube);
+                log.info("저장완료");
             }
         }
     }
