@@ -73,7 +73,7 @@ public class PlaceService {
 
         // JPQL 쿼리 작성
 
-        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId,p.categoryGroupName,p.categoryName,p.phoneNumber) " +
+        String jpql = "SELECT new com.youtube_shorts_map.dto.PlaceDto(p.id, p.name, p.roadAddress, p.lotAddress,p.latitude, p.longitude, y.name, v.youtubeUrl, v.description, v.videoId,p.categoryGroupName,p.categoryName,p.phoneNumber, v.title, v.publishedAt) " +
                 "from VideoPlace vp " +
                 "Join vp.video v " +
                 "join v.youtuber y " +
@@ -107,6 +107,7 @@ public class PlaceService {
                                                                         ", v.youtubeUrl" +
                                                                         ", v.description" +
                                                                         ", v.videoId" +
+                                                                        ", v.publishedAt" +
                                                                         ") " +
                 "from VideoPlace vp " +
                 "Join vp.video v " +
