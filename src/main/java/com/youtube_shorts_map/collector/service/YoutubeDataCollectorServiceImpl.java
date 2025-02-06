@@ -7,10 +7,7 @@ import com.google.api.services.youtube.model.SearchListResponse;
 import com.google.api.services.youtube.model.SearchResult;
 import com.youtube_shorts_map.collector.enums.ApiFetchLimit;
 import com.youtube_shorts_map.collector.videoFactory.VideoInfoFactory;
-import com.youtube_shorts_map.domain.entity.Place;
-import com.youtube_shorts_map.domain.entity.Video;
-import com.youtube_shorts_map.domain.entity.VideoPlace;
-import com.youtube_shorts_map.domain.entity.Youtuber;
+import com.youtube_shorts_map.domain.entity.*;
 import com.youtube_shorts_map.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -82,6 +79,7 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
     }
 
     @Override
+    @Transactional
     public void changeVideosToPlace(Youtuber youtuber, List<Video> videos) {
         VideoInfoFactory factory = VideoInfoFactory.createFactory(youtuber.getChannelId());
         for (Video video : videos) {
@@ -91,7 +89,10 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
                 if (places != null) {
                     for (Place place : places) {
                         try {
+
                             String cityNm = place.extractCityFromAddress(place.getRoadAddress());
+                            City byNameContaining = cityRepository.findByNameContaining(cityNm);
+                            video.updateVideoCity(byNameContaining);
 
                             Place savePlace = Place.builder()
                                     .city(cityRepository.findByNameContaining(cityNm))
@@ -109,6 +110,9 @@ public class YoutubeDataCollectorServiceImpl implements YoutubeDataCollectorServ
                             // 중복되지 않으면 저장
                             if (!placeRepository.existsByRoadAddress(place.getRoadAddress())) {
                                 placeRepository.save(savePlace);
+                            }else {
+                                continue;
+//                                savePlace = placeRepository.findByRoadAddress(place.getRoadAddress());
                             }
 
                             if (!videoPlaceRepository.existsByVideo(video)) {

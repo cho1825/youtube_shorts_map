@@ -2,12 +2,14 @@ package com.youtube_shorts_map.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "video")
+@Getter
 public class Video extends BaseEntity {
 
     @Id
@@ -51,36 +53,8 @@ public class Video extends BaseEntity {
         this.city = city;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public String getVideoId() {
-        return videoId;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getYoutubeUrl() {
-        return youtubeUrl;
-    }
-
-    public LocalDateTime getPublishedAt() {
-        return publishedAt;
-    }
-
-    public Youtuber getYoutuber() {
-        return youtuber;
-    }
-
-    public City getCity() {
-        return city;
+    public void updateVideoCity(City city) {
+        this.city = city;
     }
 
     @Override
